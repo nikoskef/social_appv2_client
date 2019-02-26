@@ -1,68 +1,48 @@
-import React, { Component } from "react";
+import React from "react";
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
+import { Button, Col, Form, Container, Label } from "reactstrap";
+import TextInput from "../../common/form/TextInput";
+import { email, requiredEmail, requiredPassword } from "../../common/formValidation/formValidation";
 
-class Login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: "",
-      password: "",
-      errors: {}
-    };
-  }
+const onSubmit = values => {
+  const newUser = { ...values };
+  console.log(newUser);
+};
 
-  onChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
+const Login = ({ handleSubmit, error, invalid, submitting }) => {
+  return (
+    <Container>
+      <Col sm="12" md={{ size: 8, offset: 2 }}>
+        <h1 className=" display-4 text-center">Log In</h1>
+        <p className="lead text-center">Sign in to your DevConnector account</p>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Field
+            autocomplete="username"
+            name="email"
+            type="email"
+            validate={[email, requiredEmail]}
+            placeholder="Email Address"
+            component={TextInput}
+          />
 
-  onSubmit = event => {
-    const { email, password } = this.state;
-    event.preventDefault();
-    const newUser = {
-      email,
-      password
-    };
-    console.log(newUser);
-  };
+          <Field
+            autocomplete="new-password"
+            name="password"
+            type="password"
+            validate={requiredPassword}
+            placeholder="Password"
+            component={TextInput}
+          />
 
-  render() {
-    return (
-      <div className="login">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Log In</h1>
-              <p className="lead text-center">Sign in to your DevConnector account</p>
-              <form onSubmit={this.onSubmit} action="dashboard.html">
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className="form-control form-control-lg"
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className="form-control form-control-lg"
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-}
+          {error && <Label>{error}</Label>}
+          <Button disabled={invalid || submitting} color="info" block>
+            Submit
+          </Button>
+        </Form>
+      </Col>
+    </Container>
+  );
+};
 
-export default Login;
+export default connect(null)(reduxForm({ form: "loginForm" })(Login));

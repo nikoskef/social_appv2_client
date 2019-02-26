@@ -1,96 +1,85 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import { reduxForm, Field } from "redux-form";
+import { Button, Col, Form, Container, Label } from "reactstrap";
+import { registerUser } from "../../actions/authActions";
+import TextInput from "../../common/form/TextInput";
+import {
+  email,
+  requiredEmail,
+  requiredName,
+  requiredPassword
+} from "../../common/formValidation/formValidation";
 
 class Register extends Component {
-  constructor() {
-    super();
-    this.state = {
-      name: "",
-      email: "",
-      password: "",
-      password2: "",
-      errors: {}
-    };
-  }
-
-  onChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value
-    });
-  };
-
-  onSubmit = event => {
-    const { name, email, password, password2 } = this.state;
-    event.preventDefault();
-    const newUser = {
-      name,
-      email,
-      password,
-      password2
-    };
+  onSubmit = values => {
+    const newUser = { ...values };
     console.log(newUser);
   };
 
   render() {
+    const { handleSubmit, error, invalid, submitting } = this.props;
     return (
-      <div className="register">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-8 m-auto">
-              <h1 className="display-4 text-center">Sign Up</h1>
-              <p className="lead text-center">Create your DevConnector account</p>
-              <form onSubmit={this.onSubmit} action="create-profile.html">
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control form-control-lg"
-                    placeholder="Name"
-                    name="name"
-                    value={this.state.name}
-                    required
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="email"
-                    className="form-control form-control-lg"
-                    placeholder="Email Address"
-                    name="email"
-                    value={this.state.email}
-                    onChange={this.onChange}
-                  />
-                  <small className="form-text text-muted">
-                    This site uses Gravatar so if you want a profile image, use a Gravatar email
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className="form-control form-control-lg"
-                    placeholder="Password"
-                    name="password"
-                    value={this.state.password}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <div className="form-group">
-                  <input
-                    type="password"
-                    className="form-control form-control-lg"
-                    placeholder="Confirm Password"
-                    name="password2"
-                    value={this.state.password2}
-                    onChange={this.onChange}
-                  />
-                </div>
-                <input type="submit" className="btn btn-info btn-block mt-4" />
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Container>
+        <Col sm="12" md={{ size: 8, offset: 2 }}>
+          <h1 className=" display-4 text-center">Sign Up</h1>
+          <p className="lead text-center">Create your DevConnector account</p>
+          <Form onSubmit={handleSubmit(this.onSubmit)}>
+            <Field
+              autocomplete="name"
+              name="name"
+              type="text"
+              placeholder="Name"
+              validate={requiredName}
+              component={TextInput}
+            />
+            <Field
+              autocomplete="username"
+              name="email"
+              type="email"
+              validate={[email, requiredEmail]}
+              placeholder="Email Address"
+              component={TextInput}
+            />
+            <small className="form-text text-muted">
+              This site uses Gravatar so if you want a profile image, use a Gravatar email
+            </small>
+            <Field
+              autocomplete="new-password"
+              name="password"
+              type="password"
+              validate={requiredPassword}
+              placeholder="Password"
+              component={TextInput}
+            />
+            <Field
+              autocomplete="new-password"
+              name="password2"
+              type="password"
+              validate={requiredPassword}
+              placeholder="Confirm Password"
+              component={TextInput}
+            />
+            {error && <Label>{error}</Label>}
+            <Button disabled={invalid || submitting} color="info" block>
+              Submit
+            </Button>
+          </Form>
+        </Col>
+      </Container>
     );
   }
 }
 
-export default Register;
+const actions = {
+  registerUser
+};
+
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(
+  mapStateToProps,
+  actions
+)(reduxForm({ form: "registerForm" })(Register));
