@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 
-import NavBar from "./components/layout/Navbar";
+import Header from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import Landing from "./components/layout/Landing";
 import Register from "./components/auth/Register";
@@ -14,7 +14,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div className="App">
-          <NavBar />
+          <Header />
           <Route exact path="/" component={Landing} />
           <div className="container">
             <Route exact path="/register" component={Register} />

@@ -4,14 +4,14 @@ import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { SET_CURRENT_USER } from "./types";
 
-export const registerUser = userData => async dispatch => {
+export const registerUser = (userData, ...rest) => async () => {
   try {
-    const res = await axios.post("/api/users/register", userData);
-    console.log(res.data);
+    const res = await axios.post("http://localhost:5000/api/users/register", userData);
+    const { history } = rest[1];
+    history.push("/login");
   } catch (error) {
-    console.log(error);
     throw new SubmissionError({
-      _error: error.message
+      _error: error.response.data.message
     });
   }
 };
