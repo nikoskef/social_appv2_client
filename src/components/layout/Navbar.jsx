@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 
 import { logoutUser } from "../../actions/authActions";
+import { clearProfile } from "../../actions/profileActions";
 
 class Header extends Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class Header extends Component {
   };
 
   onLogoutClick = () => {
+    this.props.clearProfile();
     this.props.logoutUser();
   };
 
@@ -102,7 +104,8 @@ const mapStateToProps = state => ({
 });
 
 const actions = {
-  logoutUser
+  logoutUser,
+  clearProfile
 };
 
 export default connect(
