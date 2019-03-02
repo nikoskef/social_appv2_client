@@ -4,9 +4,14 @@ import setAuthToken from "../utils/setAuthToken";
 import jwt_decode from "jwt-decode";
 import { SET_CURRENT_USER } from "./types";
 
+const axiosInstance = axios.create({
+  baseURL: `${process.env.REACT_APP_URI}/users`,
+  timeout: 3000
+});
+
 export const registerUser = (userData, ...rest) => async () => {
   try {
-    await axios.post("http://localhost:5000/api/users/register", userData);
+    await axiosInstance.post("/register", userData);
     const { history } = rest[1];
     history.push("/login");
   } catch (error) {
@@ -19,7 +24,7 @@ export const registerUser = (userData, ...rest) => async () => {
 export const loginUser = (userData, ...rest) => async dispatch => {
   try {
     const { history } = rest[1];
-    const res = await axios.post("http://localhost:5000/api/users/login", userData);
+    const res = await axiosInstance.post("/login", userData);
     const { token } = res.data;
     localStorage.setItem("jwtToken", token);
     setAuthToken(token);
