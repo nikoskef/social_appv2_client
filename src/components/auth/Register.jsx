@@ -1,15 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
-import { Button, Col, Form, Container, Label } from "reactstrap";
+import { Button, Col, Form, Container, Label, FormText } from "reactstrap";
 import { registerUser } from "../../actions/authActions";
 import TextInput from "../../common/form/TextInput";
-import {
-  email,
-  requiredEmail,
-  requiredName,
-  requiredPassword
-} from "../../common/formValidation/formValidation";
+import { validateRegister as validate } from "../../common/formValidation/formValidation";
 
 class Register extends Component {
   componentDidMount() {
@@ -26,37 +21,33 @@ class Register extends Component {
           <p className="lead text-center">Create your DevConnector account</p>
           <Form onSubmit={handleSubmit(registerUser)}>
             <Field
-              autocomplete="name"
+              autoComplete="name"
               name="name"
               type="text"
               placeholder="Name"
-              validate={requiredName}
               component={TextInput}
             />
             <Field
-              autocomplete="username"
+              autoComplete="username"
               name="email"
               type="email"
-              validate={[email, requiredEmail]}
               placeholder="Email Address"
               component={TextInput}
             />
-            <small className="form-text text-muted">
+            <FormText>
               This site uses Gravatar so if you want a profile image, use a Gravatar email
-            </small>
+            </FormText>
             <Field
-              autocomplete="new-password"
+              autoComplete="new-password"
               name="password"
               type="password"
-              validate={requiredPassword}
               placeholder="Password"
               component={TextInput}
             />
             <Field
-              autocomplete="new-password"
+              autoComplete="new-password"
               name="password2"
               type="password"
-              validate={requiredPassword}
               placeholder="Confirm Password"
               component={TextInput}
             />
@@ -83,4 +74,4 @@ const mapStateToProps = state => ({
 export default connect(
   mapStateToProps,
   actions
-)(reduxForm({ form: "registerForm" })(Register));
+)(reduxForm({ form: "registerForm", validate })(Register));

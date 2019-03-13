@@ -24,9 +24,8 @@ const IconInput = ({
           placeholder={placeholder}
           type={type}
         />
+        {touched && !!error && <FormFeedback>{error}</FormFeedback>}
       </InputGroup>
-
-      {touched && !!error && <FormFeedback>{error}</FormFeedback>}
     </FormGroup>
   );
 };

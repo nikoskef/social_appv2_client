@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 
-import setAuthToken from "./utils/setAuthToken";
+import { getCurrentUser } from "./actions/authActions";
 import { setCurrentUser, logoutUser } from "./actions/authActions";
 import { clearProfile } from "./actions/profileActions";
 import store from "./store";
@@ -18,14 +17,14 @@ import CreateProfile from "./components/create-profile/CreateProfile";
 import "./App.css";
 
 //Check for token and set header
-if (localStorage.jwtToken) {
-  setAuthToken(localStorage.jwtToken);
-  const decoded = jwt_decode(localStorage.jwtToken);
-  store.dispatch(setCurrentUser(decoded));
+
+const user = getCurrentUser();
+if (user) {
+  store.dispatch(setCurrentUser(user));
 
   //Check for expired token
   const currentTime = Date.now() / 1000;
-  if (decoded.exp < currentTime) {
+  if (user.exp < currentTime) {
     store.dispatch(logoutUser());
     // Clear current Profile
     store.dispatch(clearProfile());

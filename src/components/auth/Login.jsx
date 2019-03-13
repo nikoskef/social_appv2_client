@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { reduxForm, Field } from "redux-form";
+
 import { Button, Col, Form, Container, Label } from "reactstrap";
 import TextInput from "../../common/form/TextInput";
-import { email, requiredEmail, requiredPassword } from "../../common/formValidation/formValidation";
+
 import { loginUser } from "../../actions/authActions";
+import { validateLogin as validate } from "../../common/formValidation/formValidation";
 
 class Login extends Component {
   componentDidMount() {
@@ -23,19 +25,17 @@ class Login extends Component {
           <p className="lead text-center">Sign in to your DevConnector account</p>
           <Form onSubmit={handleSubmit(loginUser)}>
             <Field
-              autocomplete="username"
+              autoComplete="username"
               name="email"
-              type="email"
-              validate={[email, requiredEmail]}
+              type="text"
               placeholder="Email Address"
               component={TextInput}
             />
 
             <Field
-              autocomplete="new-password"
+              autoComplete="new-password"
               name="password"
               type="password"
-              validate={requiredPassword}
               placeholder="Password"
               component={TextInput}
             />
@@ -67,4 +67,4 @@ const actions = {
 export default connect(
   mapStateToProps,
   actions
-)(reduxForm({ form: "loginForm" })(Login));
+)(reduxForm({ form: "loginForm", validate })(Login));
