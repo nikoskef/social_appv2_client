@@ -8,6 +8,7 @@ import TextInput from "../../common/form/TextInput";
 
 import { loginUser } from "../../actions/authActions";
 import { validateLogin as validate } from "../../common/formValidation/formValidation";
+import Spinner from "./../../common/Spinner";
 
 class Login extends Component {
   componentDidMount() {
@@ -17,7 +18,7 @@ class Login extends Component {
   }
 
   render() {
-    const { handleSubmit, error, invalid, submitting, loginUser } = this.props;
+    const { handleSubmit, error, invalid, submitting, loginUser, loading } = this.props;
     return (
       <Container>
         <Col sm="12" md={{ size: 8, offset: 2 }}>
@@ -42,7 +43,7 @@ class Login extends Component {
 
             {error && <Label className="text-danger">{error}</Label>}
             <Button disabled={invalid || submitting} color="info" block>
-              Submit
+              {loading ? <Spinner /> : "Submit"}
             </Button>
           </Form>
         </Col>
@@ -57,7 +58,8 @@ Login.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth
+  auth: state.auth,
+  loading: state.async.loading
 });
 
 const actions = {

@@ -8,14 +8,18 @@ import TextInput from "../../common/form/TextInput";
 import SelectInput from "../../common/form/SelectInput";
 import SocialInputs from "./SocialInputs";
 import { selectOptions } from "./selectOptions";
-import { validateProfile as validate } from "./../../common/formValidation/formValidation";
-import { createProfile } from "../../actions/profileActions";
+import { validateProfile as validate } from "../../common/formValidation/formValidation";
+import { createProfile, getCurrentProfile } from "../../actions/profileActions";
 
-class CreateProfile extends Component {
+class ProfileForm extends Component {
   state = {
     displaySocialInputs: false,
     scriptLoaded: false
   };
+
+  async componentDidMount() {
+    await this.props.getCurrentProfile();
+  }
 
   onSubmit = values => {
     console.log(values);
@@ -107,11 +111,7 @@ class CreateProfile extends Component {
                 >
                   Add Social Network Links
                 </Button>
-                <style>
-                  {`
-                    @import url("https://use.fontawesome.com/releases/v5.7.2/css/all.css");
-                  `}
-                </style>
+
                 <span className="text-muted"> Optional</span>
                 {displaySocialInputs && <SocialInputs />}
                 <div>{error && <Label className="text-danger">{error}</Label>}</div>
@@ -127,21 +127,36 @@ class CreateProfile extends Component {
   }
 }
 
-CreateProfile.propTypes = {
+ProfileForm.propTypes = {
+  createProfile: PropTypes.func.isRequired,
+  getCurrentProfile: PropTypes.func.isRequired,
   profile: PropTypes.object.isRequired,
   loading: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = state => ({
-  profile: state.profile,
-  loading: state.async.loading
-});
+const mapStateToProps = state => {
+  let profile = {};
+  if (state.profile.profile) {
+    profile = state.profile.profile;
+  }
+
+  if (profile.social) {
+    profile = { ...profile.social, ...profile };
+  }
+
+  return {
+    initialValues: profile,
+    profile,
+    loading: state.async.loading
+  };
+};
 
 const actions = {
-  createProfile
+  createProfile,
+  getCurrentProfile
 };
 
 export default connect(
   mapStateToProps,
   actions
-)(reduxForm({ form: "profileForm", validate })(CreateProfile));
+)(reduxForm({ form: "profileForm", validate, enableReinitialize: true })(ProfileForm));

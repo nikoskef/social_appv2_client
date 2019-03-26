@@ -2,6 +2,7 @@ import { SubmissionError } from "redux-form";
 import jwt_decode from "jwt-decode";
 import http from "../utils/httpService";
 import { SET_CURRENT_USER } from "./types";
+import { asyncActionStart, asyncActionFinish } from "./asyncActions";
 
 const tokenKey = "token";
 
@@ -19,6 +20,7 @@ export const registerUser = (userData, ...rest) => async () => {
 
 export const loginUser = (userData, ...rest) => async dispatch => {
   try {
+    dispatch(asyncActionStart());
     const { history } = rest[1];
     const res = await http.post("users/login", userData);
     const { token } = res.data;
@@ -26,11 +28,16 @@ export const loginUser = (userData, ...rest) => async dispatch => {
     http.setAuthToken(token);
     const decoded = jwt_decode(token);
     dispatch(setCurrentUser(decoded));
+    dispatch(asyncActionFinish());
     history.push("/dashboard");
   } catch (error) {
-    throw new SubmissionError({
-      _error: error.response.data.message
-    });
+    dispatch(asyncActionFinish());
+    if (error.response && error.response.data) {
+      throw new SubmissionError({
+        _error: error.response.data.message
+      });
+    }
+    console.log(error);
   }
 };
 

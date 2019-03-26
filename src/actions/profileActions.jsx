@@ -29,7 +29,36 @@ export const createProfile = (profileData, ...rest) => async dispatch => {
     dispatch(asyncActionFinish());
     history.push("/dashboard");
   } catch (error) {
-    console.log(error);
+    dispatch(asyncActionError());
+    throw new SubmissionError({
+      _error: error.response.data.message
+    });
+  }
+};
+
+export const addExperience = (expData, ...rest) => async dispatch => {
+  dispatch(asyncActionStart());
+  try {
+    const { history } = rest[1];
+    await http.post("/profile/experience", expData);
+    dispatch(asyncActionFinish());
+    history.push("/dashboard");
+  } catch (error) {
+    dispatch(asyncActionError());
+    throw new SubmissionError({
+      _error: error.response.data.message
+    });
+  }
+};
+
+export const addEducation = (eduData, ...rest) => async dispatch => {
+  dispatch(asyncActionStart());
+  try {
+    const { history } = rest[1];
+    await http.post("/profile/education", eduData);
+    dispatch(asyncActionFinish());
+    history.push("/dashboard");
+  } catch (error) {
     dispatch(asyncActionError());
     throw new SubmissionError({
       _error: error.response.data.message

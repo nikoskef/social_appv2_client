@@ -78,3 +78,34 @@ export const validateProfile = combineValidators({
   youtube: isValidUrl(),
   instagram: isValidUrl()
 });
+
+export const validateExperience = combineValidators({
+  company: composeValidators(
+    hasLengthGreaterThan(3)({ message: "Needs to be at least 4 characters" }),
+    isRequired({ message: "Company is required" })
+  )(),
+  title: composeValidators(
+    hasLengthGreaterThan(3)({ message: "Needs to be at least 4 characters" }),
+    isRequired({ message: "Title is required" })
+  )(),
+  location: hasLengthGreaterThan(2)({ message: "Needs to be at least 3 characters" }),
+  from: isRequired({ message: "From Date is required" }),
+  description: hasLengthGreaterThan(2)({ message: "Needs to be at least 3 characters" })
+});
+
+export const validateEducation = combineValidators({
+  school: composeValidators(
+    hasLengthGreaterThan(2)({ message: "Needs to be at least 3 characters" }),
+    isRequired({ message: "School is required" })
+  )(),
+  degree: composeValidators(
+    hasLengthGreaterThan(3)({ message: "Needs to be at least 4 characters" }),
+    isRequired({ message: "Degree is required" })
+  )(),
+  fieldofstudy: composeValidators(
+    hasLengthGreaterThan(2)({ message: "Needs to be at least 3 characters" }),
+    isRequired({ message: "Field of Study is required" })
+  )(),
+  from: isRequired({ message: "From Date is required" }),
+  description: hasLengthGreaterThan(2)({ message: "Needs to be at least 3 characters" })
+});
