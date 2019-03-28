@@ -2,10 +2,12 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Container, Row, Button } from "reactstrap";
+import { Container, Row, Button, Col } from "reactstrap";
 import { getCurrentProfile, deleteAccount } from "../../actions/profileActions";
 import Spinner from "../../common/Spinner";
 import ProfileActions from "./ProfileActions";
+import Experience from "./Experience";
+import Education from "./Education";
 
 class Dashboard extends Component {
   componentDidMount() {
@@ -35,6 +37,8 @@ class Dashboard extends Component {
               Welcome <Link to={`/profile/${profile.handle}`}>{user.name}</Link>
             </p>
             <ProfileActions />
+            <Experience experience={profile.experience} />
+            <Education education={profile.education} />
             <Button onClick={this.onDeleteClick} color="danger">
               Delete my Account
             </Button>
@@ -56,10 +60,12 @@ class Dashboard extends Component {
     return (
       <div className="dashboard">
         <Container>
-          <Row>
-            <h1>Dashboard</h1>
-          </Row>
-          {dashboardContent}
+          <Col sm="12" md={{ size: 10, offset: 1 }}>
+            <Row>
+              <h1>Dashboard</h1>
+            </Row>
+            {dashboardContent}
+          </Col>
         </Container>
       </div>
     );

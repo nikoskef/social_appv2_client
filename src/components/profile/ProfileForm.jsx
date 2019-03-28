@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { reduxForm, Field } from "redux-form";
 import { Container, Row, Col, Form, Button, Label } from "reactstrap";
 import PropTypes from "prop-types";
@@ -40,6 +41,9 @@ class ProfileForm extends Component {
         <Container>
           <Row>
             <Col sm="12" md={{ size: 6, offset: 3 }}>
+              <Button className="mt-4" tag={Link} to="/dashboard" outline color="secondary">
+                Go Back
+              </Button>
               <h1 className="display-4 text-center">Create Your Profile</h1>
               <p className="lead text-center">
                 Let's get some information to make your profile stand out

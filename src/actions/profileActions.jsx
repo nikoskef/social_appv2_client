@@ -1,7 +1,16 @@
+import { toastr } from "react-redux-toastr";
 import { SubmissionError } from "redux-form";
 import http from "../utils/httpService";
 import { asyncActionStart, asyncActionFinish, asyncActionError } from "./asyncActions";
 import { GET_PROFILE, CLEAR_CURRENT_PROFILE, SET_CURRENT_USER } from "./types";
+
+const toast_success = message => {
+  toastr.success("Success!", message);
+};
+
+const toast_error = () => {
+  toastr.error("Oops!", "Something went wrong");
+};
 
 export const getCurrentProfile = () => async dispatch => {
   dispatch(asyncActionStart());
@@ -43,6 +52,7 @@ export const addExperience = (expData, ...rest) => async dispatch => {
     await http.post("/profile/experience", expData);
     dispatch(asyncActionFinish());
     history.push("/dashboard");
+    toast_success("Experience Added!");
   } catch (error) {
     dispatch(asyncActionError());
     throw new SubmissionError({
@@ -58,11 +68,38 @@ export const addEducation = (eduData, ...rest) => async dispatch => {
     await http.post("/profile/education", eduData);
     dispatch(asyncActionFinish());
     history.push("/dashboard");
+    toast_success("Education Added!");
   } catch (error) {
     dispatch(asyncActionError());
     throw new SubmissionError({
       _error: error.response.data.message
     });
+  }
+};
+
+export const deleteExperience = id => async dispatch => {
+  try {
+    const res = await http.delete(`/profile/experience/${id}`);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+    toast_success("Experience Deleted!");
+  } catch (error) {
+    toast_error();
+  }
+};
+
+export const deleteEducation = id => async dispatch => {
+  try {
+    const res = await http.delete(`/profile/education/${id}`);
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    });
+    toast_success("Education Deleted!");
+  } catch (error) {
+    toast_error();
   }
 };
 

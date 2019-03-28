@@ -12,7 +12,7 @@ import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import PrivateRoute from "./common/PrivateRoute";
-import ProfileForm from "./components/create-profile/ProfileForm";
+import ProfileForm from "./components/profile/ProfileForm";
 import AddExperience from "./components/add-credentials/AddExperience";
 import AddEducation from "./components/add-credentials/AddEducation";
 
