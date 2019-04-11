@@ -51,6 +51,7 @@ export const setCurrentUser = decoded => {
 export const getCurrentUser = () => {
   try {
     const token = localStorage.getItem(tokenKey);
+    http.setAuthToken(token);
     return jwt_decode(token);
   } catch (error) {
     return null;

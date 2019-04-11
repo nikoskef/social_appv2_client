@@ -144,6 +144,10 @@ const mapStateToProps = state => {
     profile = state.profile.profile;
   }
 
+  if (state.profile && state.profile.profile && Array.isArray(profile.skills)) {
+    profile.skills = profile.skills.join(",");
+  }
+
   if (profile.social) {
     profile = { ...profile.social, ...profile };
   }
